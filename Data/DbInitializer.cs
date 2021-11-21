@@ -9,64 +9,64 @@ namespace web.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(SchoolContext context)
+        public static void Initialize(AccessContext context)
         {
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.Students.Any())
+            if (context.Clients.Any())
             {
                 return;   // DB has been seeded
             }
 
-            var students = new Student[]
+            var clients = new Client[]
             {
-                new Student{FirstMidName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
-                new Student{FirstMidName="Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstMidName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Student{FirstMidName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstMidName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Student{FirstMidName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2016-09-01")},
-                new Student{FirstMidName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Student{FirstMidName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
+                new Client{FirstMidName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
+                new Client{FirstMidName="Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Client{FirstMidName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2018-09-01")},
+                new Client{FirstMidName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Client{FirstMidName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2017-09-01")},
+                new Client{FirstMidName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2016-09-01")},
+                new Client{FirstMidName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2018-09-01")},
+                new Client{FirstMidName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
             };
 
-            context.Students.AddRange(students);
+            context.Clients.AddRange(clients);
             context.SaveChanges();
 
-            var courses = new Course[]
+            var sensors = new Sensor[]
             {
-                new Course{CourseID=1050,Title="Chemistry",Credits=3},
-                new Course{CourseID=4022,Title="Microeconomics",Credits=3},
-                new Course{CourseID=4041,Title="Macroeconomics",Credits=3},
-                new Course{CourseID=1045,Title="Calculus",Credits=4},
-                new Course{CourseID=3141,Title="Trigonometry",Credits=4},
-                new Course{CourseID=2021,Title="Composition",Credits=3},
-                new Course{CourseID=2042,Title="Literature",Credits=4}
+                new Sensor{SensorID=1050,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=4022,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=4041,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=1045,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=3141,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=2021,SerialNumber="",Type="",Location="",FirmwareVersion=""},
+                new Sensor{SensorID=2042,SerialNumber="",Type="",Location="",FirmwareVersion=""}
             };
 
-            context.Courses.AddRange(courses);
+            context.Sensors.AddRange(sensors);
             context.SaveChanges();
 
-            var enrollments = new Enrollment[]
+            var accesses = new SensorAccess[]
             {
-                new Enrollment{StudentID=1,CourseID=1050,Grade=Grade.A},
-                new Enrollment{StudentID=1,CourseID=4022,Grade=Grade.C},
-                new Enrollment{StudentID=1,CourseID=4041,Grade=Grade.B},
-                new Enrollment{StudentID=2,CourseID=1045,Grade=Grade.B},
-                new Enrollment{StudentID=2,CourseID=3141,Grade=Grade.F},
-                new Enrollment{StudentID=2,CourseID=2021,Grade=Grade.F},
-                new Enrollment{StudentID=3,CourseID=1050},
-                new Enrollment{StudentID=4,CourseID=1050},
-                new Enrollment{StudentID=4,CourseID=4022,Grade=Grade.F},
-                new Enrollment{StudentID=5,CourseID=4041,Grade=Grade.C},
-                new Enrollment{StudentID=6,CourseID=1045},
-                new Enrollment{StudentID=7,CourseID=3141,Grade=Grade.A},
+                new SensorAccess{ClientID=1,SensorID=1050},
+                new SensorAccess{ClientID=1,SensorID=4022},
+                new SensorAccess{ClientID=1,SensorID=4041},
+                new SensorAccess{ClientID=2,SensorID=1045},
+                new SensorAccess{ClientID=2,SensorID=3141},
+                new SensorAccess{ClientID=2,SensorID=2021},
+                new SensorAccess{ClientID=3,SensorID=1050},
+                new SensorAccess{ClientID=4,SensorID=1050},
+                new SensorAccess{ClientID=4,SensorID=4022},
+                new SensorAccess{ClientID=5,SensorID=4041},
+                new SensorAccess{ClientID=6,SensorID=1045},
+                new SensorAccess{ClientID=7,SensorID=3141},
             };
 
-            context.Enrollments.AddRange(enrollments);
+            context.Accesses.AddRange(accesses);
 
-                        var roles = new IdentityRole[] {
+            var roles = new IdentityRole[] {
                 new IdentityRole{Id="1", Name="Administrator"},
                 new IdentityRole{Id="2", Name="Manager"},
                 new IdentityRole{Id="3", Name="Staff"}
@@ -89,7 +89,8 @@ namespace web.Data
                 PhoneNumber = "+111111111111",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                ClientID = 1
             };
 
 

@@ -13,23 +13,23 @@ using Microsoft.AspNetCore.Identity;
 namespace web.Controllers
 {
     [Authorize]
-    public class CoursesController : Controller
+    public class SensorsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly AccessContext _context;
         private readonly UserManager<ApplicationUser> _usermanager;
-        public CoursesController(SchoolContext context, UserManager<ApplicationUser> userManager)
+        public SensorsController(AccessContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _usermanager = userManager;
         }
 
-        // GET: Courses
+        // GET: Sensors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Courses.ToListAsync());
+            return View(await _context.Sensors.ToListAsync());
         }
 
-        // GET: Courses/Details/5
+        // GET: Sensors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,46 +37,46 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.CourseID == id);
-            if (course == null)
+            var Sensor = await _context.Sensors
+                .FirstOrDefaultAsync(m => m.SensorID == id);
+            if (Sensor == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(Sensor);
         }
 
-        // GET: Courses/Create
+        // GET: Sensors/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: Sensors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseID,Title,Credits")] Course course)
+        public async Task<IActionResult> Create([Bind("SensorID,Title,Credits")] Sensor Sensor)
         {
             var currentUser = await _usermanager.GetUserAsync(User);
 
             if (ModelState.IsValid)
             {
-                course.DateCreated = DateTime.Now;
-                course.DateEdited = DateTime.Now;
-                course.Owner = currentUser;
+                Sensor.DateCreated = DateTime.Now;
+                Sensor.DateEdited = DateTime.Now;
+                Sensor.Owner = currentUser;
                 
 
-                _context.Add(course);
+                _context.Add(Sensor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(Sensor);
         }
 
-        // GET: Courses/Edit/5
+        // GET: Sensors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,22 +84,22 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses.FindAsync(id);
-            if (course == null)
+            var Sensor = await _context.Sensors.FindAsync(id);
+            if (Sensor == null)
             {
                 return NotFound();
             }
-            return View(course);
+            return View(Sensor);
         }
 
-        // POST: Courses/Edit/5
+        // POST: Sensors/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseID,Title,Credits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("SensorID,Title,Credits")] Sensor Sensor)
         {
-            if (id != course.CourseID)
+            if (id != Sensor.SensorID)
             {
                 return NotFound();
             }
@@ -108,12 +108,12 @@ namespace web.Controllers
             {
                 try
                 {
-                    _context.Update(course);
+                    _context.Update(Sensor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.CourseID))
+                    if (!SensorExists(Sensor.SensorID))
                     {
                         return NotFound();
                     }
@@ -124,10 +124,10 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(Sensor);
         }
 
-        // GET: Courses/Delete/5
+        // GET: Sensors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,30 +135,30 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.CourseID == id);
-            if (course == null)
+            var Sensor = await _context.Sensors
+                .FirstOrDefaultAsync(m => m.SensorID == id);
+            if (Sensor == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(Sensor);
         }
 
-        // POST: Courses/Delete/5
+        // POST: Sensors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
-            _context.Courses.Remove(course);
+            var Sensor = await _context.Sensors.FindAsync(id);
+            _context.Sensors.Remove(Sensor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CourseExists(int id)
+        private bool SensorExists(int id)
         {
-            return _context.Courses.Any(e => e.CourseID == id);
+            return _context.Sensors.Any(e => e.SensorID == id);
         }
     }
 }

@@ -1,4 +1,4 @@
-@model IEnumerable<web.Models.Course>
+@model IEnumerable<web.Models.Sensor>
 
 @{
     ViewData["Title"] = "Index";
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Credits)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.SensorID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SensorID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SensorID">Delete</a>
             </td>
         </tr>
 }

@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Authorization;
 namespace web.Controllers
 {
 
-    public class StudentsController : Controller
+    public class ClientsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly AccessContext _context;
 
-        public StudentsController(SchoolContext context)
+        public ClientsController(AccessContext context)
         {
             _context = context;
         }
 
-        // GET: Students
+        // GET: Clients
         public async Task<IActionResult> Index(
         string sortOrder,
         string currentFilter,
@@ -43,34 +43,34 @@ namespace web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var students = from s in _context.Students
+            var Clients = from s in _context.Clients
                         select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                students = students.Where(s => s.LastName.Contains(searchString)
+                Clients = Clients.Where(s => s.LastName.Contains(searchString)
                                     || s.FirstMidName.Contains(searchString));
             }
             switch (sortOrder)
             {
                 case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
+                    Clients = Clients.OrderByDescending(s => s.LastName);
                     break;
                 case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
+                    Clients = Clients.OrderBy(s => s.EnrollmentDate);
                     break;
                 case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                    Clients = Clients.OrderByDescending(s => s.EnrollmentDate);
                     break;
                 default:
-                    students = students.OrderBy(s => s.LastName);
+                    Clients = Clients.OrderBy(s => s.LastName);
                     break;
             }
 
             int pageSize = 3;
-            return View(await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Client>.CreateAsync(Clients.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        // GET: Students/Details/5
+        // GET: Clients/Details/5
         [Authorize(Roles = "Administrator, Manager, Staff")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -79,38 +79,38 @@ namespace web.Controllers
                 return NotFound();
             }
 
-        var student = await _context.Students
+        var Client = await _context.Clients
         .Include(s => s.Enrollments)
             .ThenInclude(e => e.Course)
         .AsNoTracking()
         .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (student == null)
+            if (Client == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(Client);
         }
 
-        // GET: Students/Create
+        // GET: Clients/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Students/Create
+        // POST: Clients/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate")] Student student)
+        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate")] Client Client)
         {
             try
             {
                  if (ModelState.IsValid)
                 {
-                    _context.Add(student);
+                    _context.Add(Client);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -123,10 +123,10 @@ namespace web.Controllers
                     "Try again, and if the problem persists " +
                     "see your system administrator.");
             }
-            return View(student);
+            return View(Client);
         }
 
-        // GET: Students/Edit/5
+        // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -134,23 +134,23 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
+            var Client = await _context.Clients.FindAsync(id);
+            if (Client == null)
             {
                 return NotFound();
             }
-            return View(student);
+            return View(Client);
         }
 
-        // POST: Students/Edit/5
+        // POST: Clients/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstMidName,EnrollmentDate")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstMidName,EnrollmentDate")] Client Client)
         {
-            if (id != student.ID)
+            if (id != Client.ID)
             {
                 return NotFound();
             }
@@ -159,12 +159,12 @@ namespace web.Controllers
             {
                 try
                 {
-                    _context.Update(student);
+                    _context.Update(Client);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentExists(student.ID))
+                    if (!ClientExists(Client.ID))
                     {
                         return NotFound();
                     }
@@ -175,10 +175,10 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(Client);
         }
 
-        // GET: Students/Delete/5
+        // GET: Clients/Delete/5
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -187,30 +187,30 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students
+            var Client = await _context.Clients
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            if (Client == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(Client);
         }
 
-        // POST: Students/Delete/5
+        // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            _context.Students.Remove(student);
+            var Client = await _context.Clients.FindAsync(id);
+            _context.Clients.Remove(Client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentExists(int id)
+        private bool ClientExists(int id)
         {
-            return _context.Students.Any(e => e.ID == id);
+            return _context.Clients.Any(e => e.ID == id);
         }
     }
 }
