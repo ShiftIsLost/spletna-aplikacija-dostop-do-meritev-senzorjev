@@ -36,13 +36,13 @@ namespace web.Data
 
             var sensors = new Sensor[]
             {
-                new Sensor{SensorId=1050,SerialNumber="55143",Type="Temperatura",Location="Vhod",FirmwareVersion=""},
-                new Sensor{SensorId=4022,SerialNumber="04101",Type="Klorometer",Location="Glavni bazen",FirmwareVersion=""},
-                new Sensor{SensorId=4041,SerialNumber="66212",Type="Temperatura",Location="Tobogan",FirmwareVersion=""},
-                new Sensor{SensorId=1045,SerialNumber="08990",Type="Klorometer",Location="Tobogan",FirmwareVersion=""},
-                new Sensor{SensorId=3141,SerialNumber="41769",Type="Temperatura",Location="Savna",FirmwareVersion=""},
-                new Sensor{SensorId=2021,SerialNumber="83990",Type="Zasedenost",Location="Glavni bazen",FirmwareVersion=""},
-                new Sensor{SensorId=2042,SerialNumber="10088",Type="Visina",Location="Glavni bazen",FirmwareVersion=""}
+                new Sensor{SensorId=1050,SerialNumber="55143",Type="Temperatura",Location="Vhod",FirmwareVersion="1"},
+                new Sensor{SensorId=4022,SerialNumber="04101",Type="Klorometer",Location="Glavni bazen",FirmwareVersion="1"},
+                new Sensor{SensorId=4041,SerialNumber="66212",Type="Temperatura",Location="Tobogan",FirmwareVersion="1"},
+                new Sensor{SensorId=1045,SerialNumber="08990",Type="Klorometer",Location="Tobogan",FirmwareVersion="1"},
+                new Sensor{SensorId=3141,SerialNumber="41769",Type="Temperatura",Location="Savna",FirmwareVersion="1"},
+                new Sensor{SensorId=2021,SerialNumber="83990",Type="Zasedenost",Location="Glavni bazen",FirmwareVersion="1"},
+                new Sensor{SensorId=2042,SerialNumber="10088",Type="Visina",Location="Glavni bazen",FirmwareVersion="1"}
             };
 
             context.Sensors.AddRange(sensors);
@@ -82,10 +82,6 @@ namespace web.Data
                 FirstName = "Bob",
                 LastName = "Dilon",
                 Email = "bob@example.com",
-                NormalizedEmail = "XXXX@EXAMPLE.COM",
-                UserName = "bob@example.com",
-                NormalizedUserName = "bob@example.com",
-                PhoneNumber = "+111111111111",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),

@@ -14,6 +14,6 @@ namespace web.Models
         public string? Type { get; set; }
         public string? FirmwareVersion { get; set; }
 
-        public ICollection<SensorAccess> Accesses { get; set; } 
+        public ICollection<SensorAccess>? Accesses { get; set; } 
     }
 }
