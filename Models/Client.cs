@@ -5,8 +5,13 @@ namespace web.Models
 {
     public class Client
     {
-        public int ClientID { get; set; }
+        public int ClientId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string OrgType { get; set; }
-        public int OrgID { get; set; }
+        public int OrgId { get; set; }
+
+
+        public ICollection<SensorAccess> Accesses { get; set; } 
     }
 }

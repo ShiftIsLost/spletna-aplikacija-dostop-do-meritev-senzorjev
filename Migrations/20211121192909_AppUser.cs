@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace web.Migrations
 {
-    public partial class ExtendCourse : Migration
+    public partial class AppUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,9 +28,9 @@ namespace web.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,18 +52,19 @@ namespace web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Student",
+                name: "Client",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FirstMidName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrgType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrgId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.ID);
+                    table.PrimaryKey("PK_Client", x => x.ClientId);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,50 +174,50 @@ namespace web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Course",
+                name: "Sensor",
                 columns: table => new
                 {
-                    CourseID = table.Column<int>(type: "int", nullable: false),
+                    SensorId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Credits = table.Column<int>(type: "int", nullable: false)
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirmwareVersion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.CourseID);
+                    table.PrimaryKey("PK_Sensor", x => x.SensorId);
                     table.ForeignKey(
-                        name: "FK_Course_AspNetUsers_OwnerId",
+                        name: "FK_Sensor_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollment",
+                name: "SensorAccess",
                 columns: table => new
                 {
-                    EnrollmentID = table.Column<int>(type: "int", nullable: false)
+                    AccessId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CourseID = table.Column<int>(type: "int", nullable: false),
-                    StudentID = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: true)
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    SensorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollment", x => x.EnrollmentID);
+                    table.PrimaryKey("PK_SensorAccess", x => x.AccessId);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Course_CourseID",
-                        column: x => x.CourseID,
-                        principalTable: "Course",
-                        principalColumn: "CourseID",
+                        name: "FK_SensorAccess_Client_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Client",
+                        principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Student_StudentID",
-                        column: x => x.StudentID,
-                        principalTable: "Student",
-                        principalColumn: "ID",
+                        name: "FK_SensorAccess_Sensor_SensorId",
+                        column: x => x.SensorId,
+                        principalTable: "Sensor",
+                        principalColumn: "SensorId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -260,19 +261,19 @@ namespace web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Course_OwnerId",
-                table: "Course",
+                name: "IX_Sensor_OwnerId",
+                table: "Sensor",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_CourseID",
-                table: "Enrollment",
-                column: "CourseID");
+                name: "IX_SensorAccess_ClientId",
+                table: "SensorAccess",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_StudentID",
-                table: "Enrollment",
-                column: "StudentID");
+                name: "IX_SensorAccess_SensorId",
+                table: "SensorAccess",
+                column: "SensorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -293,16 +294,16 @@ namespace web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Enrollment");
+                name: "SensorAccess");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Course");
+                name: "Client");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Sensor");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

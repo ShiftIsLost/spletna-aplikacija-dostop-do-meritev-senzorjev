@@ -18,8 +18,10 @@ namespace web.Data
         {
             base.OnModelCreating(modelBuilder); 
             modelBuilder.Entity<Sensor>().ToTable("Sensor");
-            modelBuilder.Entity<SensorAccess>().ToTable("SensorAccess");
             modelBuilder.Entity<Client>().ToTable("Client");
+            modelBuilder.Entity<SensorAccess>().ToTable("SensorAccess");
+            modelBuilder.Entity<SensorAccess>().HasKey(t => t.AccessId);
+            //modelBuilder.Entity<SensorAccess>().HasMany(t => t.Sensor).WithMany(t => t.Client);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace web.Controllers
             }
 
             var Sensor = await _context.Sensors
-                .FirstOrDefaultAsync(m => m.SensorID == id);
+                .FirstOrDefaultAsync(m => m.SensorId == id);
             if (Sensor == null)
             {
                 return NotFound();
@@ -58,15 +58,13 @@ namespace web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SensorID,Title,Credits")] Sensor Sensor)
+        public async Task<IActionResult> Create([Bind("SensorId,SerialNumber")] Sensor Sensor)
         {
             var currentUser = await _usermanager.GetUserAsync(User);
 
             if (ModelState.IsValid)
             {
-                Sensor.DateCreated = DateTime.Now;
-                Sensor.DateEdited = DateTime.Now;
-                Sensor.Owner = currentUser;
+                //Sensor.Owner = currentUser;
                 
 
                 _context.Add(Sensor);
@@ -75,6 +73,7 @@ namespace web.Controllers
             }
             return View(Sensor);
         }
+        
 
         // GET: Sensors/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -97,9 +96,9 @@ namespace web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SensorID,Title,Credits")] Sensor Sensor)
+        public async Task<IActionResult> Edit(int id, [Bind("SensorId,SerialNumber")] Sensor Sensor)
         {
-            if (id != Sensor.SensorID)
+            if (id != Sensor.SensorId)
             {
                 return NotFound();
             }
@@ -113,7 +112,7 @@ namespace web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SensorExists(Sensor.SensorID))
+                    if (!SensorExists(Sensor.SensorId))
                     {
                         return NotFound();
                     }
@@ -136,7 +135,7 @@ namespace web.Controllers
             }
 
             var Sensor = await _context.Sensors
-                .FirstOrDefaultAsync(m => m.SensorID == id);
+                .FirstOrDefaultAsync(m => m.SensorId == id);
             if (Sensor == null)
             {
                 return NotFound();
@@ -158,7 +157,7 @@ namespace web.Controllers
 
         private bool SensorExists(int id)
         {
-            return _context.Sensors.Any(e => e.SensorID == id);
+            return _context.Sensors.Any(e => e.SensorId == id);
         }
     }
 }

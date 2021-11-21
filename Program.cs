@@ -5,18 +5,18 @@ using web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("SchoolContext");
+var connectionString = builder.Configuration.GetConnectionString("AccessContext");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//builder.Services.AddDbContext<SchoolContext>(options =>
-//            options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolContext")));
+//builder.Services.AddDbContext<AccessContext>(options =>
+//            options.UseSqlServer(builder.Configuration.GetConnectionString("AccessContext")));
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<SchoolContext>();
+    .AddEntityFrameworkStores<AccessContext>();
 
 
-builder.Services.AddDbContext<SchoolContext>(options =>
+builder.Services.AddDbContext<AccessContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
@@ -53,7 +53,7 @@ static void CreateDbIfNotExists(IHost host)
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<SchoolContext>();
+                    var context = services.GetRequiredService<AccessContext>();
                     //context.Database.EnsureCreated();
                     DbInitializer.Initialize(context);
                 }

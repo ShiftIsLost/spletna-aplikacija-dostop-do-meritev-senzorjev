@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web.Data;
 
@@ -11,11 +10,10 @@ using web.Data;
 
 namespace web.Migrations
 {
-    [DbContext(typeof(SchoolContext))]
-    [Migration("20211028105154_ExtendCourse")]
-    partial class ExtendCourse
+    [DbContext(typeof(AccessContext))]
+    partial class AccessContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,8 +167,8 @@ namespace web.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -184,9 +182,11 @@ namespace web.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -235,79 +235,89 @@ namespace web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("web.Models.Course", b =>
+            modelBuilder.Entity("web.Models.Client", b =>
                 {
-                    b.Property<int>("CourseID")
+                    b.Property<int>("ClientId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Credits")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"), 1L, 1);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrgId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("OrgType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateEdited")
-                        .HasColumnType("datetime2");
+                    b.HasKey("ClientId");
+
+                    b.ToTable("Client", (string)null);
+                });
+
+            modelBuilder.Entity("web.Models.Sensor", b =>
+                {
+                    b.Property<int>("SensorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SensorId"), 1L, 1);
+
+                    b.Property<string>("FirmwareVersion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseID");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SensorId");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Course", (string)null);
+                    b.ToTable("Sensor", (string)null);
                 });
 
-            modelBuilder.Entity("web.Models.Enrollment", b =>
+            modelBuilder.Entity("web.Models.SensorAccess", b =>
                 {
-                    b.Property<int>("EnrollmentID")
+                    b.Property<int>("AccessId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccessId"), 1L, 1);
 
-                    b.Property<int>("CourseID")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Grade")
+                    b.Property<int>("SensorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentID")
-                        .HasColumnType("int");
+                    b.HasKey("AccessId");
 
-                    b.HasKey("EnrollmentID");
+                    b.HasIndex("ClientId");
 
-                    b.HasIndex("CourseID");
+                    b.HasIndex("SensorId");
 
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("Enrollment", (string)null);
-                });
-
-            modelBuilder.Entity("web.Models.Student", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstMidName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Student", (string)null);
+                    b.ToTable("SensorAccess", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,7 +371,7 @@ namespace web.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("web.Models.Course", b =>
+            modelBuilder.Entity("web.Models.Sensor", b =>
                 {
                     b.HasOne("web.Models.ApplicationUser", "Owner")
                         .WithMany()
@@ -370,33 +380,33 @@ namespace web.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("web.Models.Enrollment", b =>
+            modelBuilder.Entity("web.Models.SensorAccess", b =>
                 {
-                    b.HasOne("web.Models.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseID")
+                    b.HasOne("web.Models.Client", "Client")
+                        .WithMany("Accesses")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("web.Models.Student", "Student")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StudentID")
+                    b.HasOne("web.Models.Sensor", "Sensor")
+                        .WithMany("Accesses")
+                        .HasForeignKey("SensorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Client");
 
-                    b.Navigation("Student");
+                    b.Navigation("Sensor");
                 });
 
-            modelBuilder.Entity("web.Models.Course", b =>
+            modelBuilder.Entity("web.Models.Client", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Accesses");
                 });
 
-            modelBuilder.Entity("web.Models.Student", b =>
+            modelBuilder.Entity("web.Models.Sensor", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Accesses");
                 });
 #pragma warning restore 612, 618
         }

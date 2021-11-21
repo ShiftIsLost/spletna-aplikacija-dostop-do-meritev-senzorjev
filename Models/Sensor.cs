@@ -6,11 +6,14 @@ namespace web.Models
     public class Sensor
     {
         //[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SensorID { get; set; }    
+        public int SensorId { get; set; }    
         public ApplicationUser Owner { get; set; }
 
         public string SerialNumber { get; set; }
-        public string Tpye { get; set; }
+        public string Location { get; set; }
+        public string Type { get; set; }
         public string FirmwareVersion { get; set; }
+
+        public ICollection<SensorAccess> Accesses { get; set; } 
     }
 }

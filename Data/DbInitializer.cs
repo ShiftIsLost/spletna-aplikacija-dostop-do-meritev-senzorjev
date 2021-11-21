@@ -21,14 +21,14 @@ namespace web.Data
 
             var clients = new Client[]
             {
-                new Client{FirstMidName="Carson",LastName="Alexander",EnrollmentDate=DateTime.Parse("2019-09-01")},
-                new Client{FirstMidName="Meredith",LastName="Alonso",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Client{FirstMidName="Arturo",LastName="Anand",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Client{FirstMidName="Gytis",LastName="Barzdukas",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Client{FirstMidName="Yan",LastName="Li",EnrollmentDate=DateTime.Parse("2017-09-01")},
-                new Client{FirstMidName="Peggy",LastName="Justice",EnrollmentDate=DateTime.Parse("2016-09-01")},
-                new Client{FirstMidName="Laura",LastName="Norman",EnrollmentDate=DateTime.Parse("2018-09-01")},
-                new Client{FirstMidName="Nino",LastName="Olivetto",EnrollmentDate=DateTime.Parse("2019-09-01")}
+                new Client{FirstName="Franc",LastName="Novak",OrgType="",OrgId=0},
+                new Client{FirstName="Marija",LastName="Horvat",OrgType="",OrgId=0},
+                new Client{FirstName="Janez",LastName="Kovacic",OrgType="",OrgId=1},
+                new Client{FirstName="Ana",LastName="Krajnc",OrgType="",OrgId=2},
+                new Client{FirstName="Marko",LastName="Zupancic",OrgType="",OrgId=3},
+                new Client{FirstName="Maja",LastName="Kovac",OrgType="",OrgId=4},
+                new Client{FirstName="Andrej",LastName="Potocnik",OrgType="",OrgId=5},
+                new Client{FirstName="Irena",LastName="Mlakar",OrgType="",OrgId=6}
             };
 
             context.Clients.AddRange(clients);
@@ -36,13 +36,13 @@ namespace web.Data
 
             var sensors = new Sensor[]
             {
-                new Sensor{SensorID=1050,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=4022,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=4041,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=1045,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=3141,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=2021,SerialNumber="",Type="",Location="",FirmwareVersion=""},
-                new Sensor{SensorID=2042,SerialNumber="",Type="",Location="",FirmwareVersion=""}
+                new Sensor{SensorId=1050,SerialNumber="55143",Type="Temperatura",Location="Vhod",FirmwareVersion=""},
+                new Sensor{SensorId=4022,SerialNumber="04101",Type="Klorometer",Location="Glavni bazen",FirmwareVersion=""},
+                new Sensor{SensorId=4041,SerialNumber="66212",Type="Temperatura",Location="Tobogan",FirmwareVersion=""},
+                new Sensor{SensorId=1045,SerialNumber="08990",Type="Klorometer",Location="Tobogan",FirmwareVersion=""},
+                new Sensor{SensorId=3141,SerialNumber="41769",Type="Temperatura",Location="Savna",FirmwareVersion=""},
+                new Sensor{SensorId=2021,SerialNumber="83990",Type="Zasedenost",Location="Glavni bazen",FirmwareVersion=""},
+                new Sensor{SensorId=2042,SerialNumber="10088",Type="Visina",Location="Glavni bazen",FirmwareVersion=""}
             };
 
             context.Sensors.AddRange(sensors);
@@ -50,18 +50,18 @@ namespace web.Data
 
             var accesses = new SensorAccess[]
             {
-                new SensorAccess{ClientID=1,SensorID=1050},
-                new SensorAccess{ClientID=1,SensorID=4022},
-                new SensorAccess{ClientID=1,SensorID=4041},
-                new SensorAccess{ClientID=2,SensorID=1045},
-                new SensorAccess{ClientID=2,SensorID=3141},
-                new SensorAccess{ClientID=2,SensorID=2021},
-                new SensorAccess{ClientID=3,SensorID=1050},
-                new SensorAccess{ClientID=4,SensorID=1050},
-                new SensorAccess{ClientID=4,SensorID=4022},
-                new SensorAccess{ClientID=5,SensorID=4041},
-                new SensorAccess{ClientID=6,SensorID=1045},
-                new SensorAccess{ClientID=7,SensorID=3141},
+                new SensorAccess{ClientId=1,SensorId=1050},
+                new SensorAccess{ClientId=1,SensorId=4022},
+                new SensorAccess{ClientId=1,SensorId=4041},
+                new SensorAccess{ClientId=2,SensorId=1045},
+                new SensorAccess{ClientId=2,SensorId=3141},
+                new SensorAccess{ClientId=2,SensorId=2021},
+                new SensorAccess{ClientId=3,SensorId=1050},
+                new SensorAccess{ClientId=4,SensorId=1050},
+                new SensorAccess{ClientId=4,SensorId=4022},
+                new SensorAccess{ClientId=5,SensorId=4041},
+                new SensorAccess{ClientId=6,SensorId=1045},
+                new SensorAccess{ClientId=7,SensorId=3141},
             };
 
             context.Accesses.AddRange(accesses);
@@ -81,7 +81,6 @@ namespace web.Data
             {
                 FirstName = "Bob",
                 LastName = "Dilon",
-                City = "Ljubljana",
                 Email = "bob@example.com",
                 NormalizedEmail = "XXXX@EXAMPLE.COM",
                 UserName = "bob@example.com",
@@ -90,7 +89,7 @@ namespace web.Data
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                ClientID = 1
+                ClientId = 1
             };
 
 

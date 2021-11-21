@@ -30,7 +30,7 @@ namespace web.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
             if (searchString != null)
             {
@@ -47,20 +47,20 @@ namespace web.Controllers
                         select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                Clients = Clients.Where(s => s.LastName.Contains(searchString)
-                                    || s.FirstMidName.Contains(searchString));
+                Clients = Clients.Where(s => s.LastName.Contains(searchString) || s.FirstName.Contains(searchString));
             }
             switch (sortOrder)
             {
                 case "name_desc":
                     Clients = Clients.OrderByDescending(s => s.LastName);
                     break;
-                case "Date":
+                /*case "Date":
                     Clients = Clients.OrderBy(s => s.EnrollmentDate);
                     break;
                 case "date_desc":
                     Clients = Clients.OrderByDescending(s => s.EnrollmentDate);
                     break;
+                    */
                 default:
                     Clients = Clients.OrderBy(s => s.LastName);
                     break;
@@ -80,10 +80,10 @@ namespace web.Controllers
             }
 
         var Client = await _context.Clients
-        .Include(s => s.Enrollments)
-            .ThenInclude(e => e.Course)
+        .Include(s => s.Accesses)
+            .ThenInclude(e => e.Sensor)
         .AsNoTracking()
-        .FirstOrDefaultAsync(m => m.ID == id);
+        .FirstOrDefaultAsync(m => m.ClientId == id);
 
             if (Client == null)
             {
@@ -104,7 +104,7 @@ namespace web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastName,FirstMidName,EnrollmentDate")] Client Client)
+        public async Task<IActionResult> Create([Bind("LastName,FirstName")] Client Client)
         {
             try
             {
@@ -148,9 +148,9 @@ namespace web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstMidName,EnrollmentDate")] Client Client)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,LastName,FirstName")] Client Client)
         {
-            if (id != Client.ID)
+            if (id != Client.ClientId)
             {
                 return NotFound();
             }
@@ -164,7 +164,7 @@ namespace web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(Client.ID))
+                    if (!ClientExists(Client.ClientId))
                     {
                         return NotFound();
                     }
@@ -188,7 +188,7 @@ namespace web.Controllers
             }
 
             var Client = await _context.Clients
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.ClientId == id);
             if (Client == null)
             {
                 return NotFound();
@@ -210,7 +210,7 @@ namespace web.Controllers
 
         private bool ClientExists(int id)
         {
-            return _context.Clients.Any(e => e.ID == id);
+            return _context.Clients.Any(e => e.ClientId == id);
         }
     }
 }
