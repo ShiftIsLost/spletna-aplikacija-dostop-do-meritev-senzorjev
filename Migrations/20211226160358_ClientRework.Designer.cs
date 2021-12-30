@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web.Data;
 
@@ -11,9 +12,10 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(AccessContext))]
-    partial class AccessContextModelSnapshot : ModelSnapshot
+    [Migration("20211226160358_ClientRework")]
+    partial class ClientRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,6 +183,12 @@ namespace web.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -194,6 +202,12 @@ namespace web.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("OrgId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OrgType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -223,31 +237,6 @@ namespace web.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("web.Models.Client", b =>
-                {
-                    b.Property<int>("ClientId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"), 1L, 1);
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrgId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrgType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClientId");
 
                     b.ToTable("Client", (string)null);
                 });
@@ -289,12 +278,15 @@ namespace web.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ClientId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("SensorId")
                         .HasColumnType("int");
 
                     b.HasKey("AccessId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId1");
 
                     b.HasIndex("SensorId");
 
@@ -354,11 +346,9 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.SensorAccess", b =>
                 {
-                    b.HasOne("web.Models.Client", "Client")
+                    b.HasOne("web.Models.ApplicationUser", "Client")
                         .WithMany("Accesses")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId1");
 
                     b.HasOne("web.Models.Sensor", "Sensor")
                         .WithMany("Accesses")
@@ -371,7 +361,7 @@ namespace web.Migrations
                     b.Navigation("Sensor");
                 });
 
-            modelBuilder.Entity("web.Models.Client", b =>
+            modelBuilder.Entity("web.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Accesses");
                 });

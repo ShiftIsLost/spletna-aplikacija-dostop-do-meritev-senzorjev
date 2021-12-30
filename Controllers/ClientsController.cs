@@ -29,8 +29,9 @@ namespace web.Controllers
         int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["NameSortParm"] =  sortOrder == "name" ? "name_desc" : "name";
+            ViewData["FNameSortParm"] = sortOrder == "fname" ? "fname_desc" : "fname";
+            ViewData["cIDSortParm"] = sortOrder == "cID" ? "cID_desc" : "cID";
 
             if (searchString != null)
             {
@@ -54,24 +55,32 @@ namespace web.Controllers
                 case "name_desc":
                     Clients = Clients.OrderByDescending(s => s.LastName);
                     break;
-                /*case "Date":
-                    Clients = Clients.OrderBy(s => s.EnrollmentDate);
+                case "fname_desc":
+                    Clients = Clients.OrderByDescending(s => s.FirstName);
                     break;
-                case "date_desc":
-                    Clients = Clients.OrderByDescending(s => s.EnrollmentDate);
+                case "cID_desc":
+                    Clients = Clients.OrderByDescending(s => s.ClientId);
                     break;
-                    */
-                default:
+                case "name":
                     Clients = Clients.OrderBy(s => s.LastName);
+                    break;
+                case "fname":
+                    Clients = Clients.OrderBy(s => s.FirstName);
+                    break;
+                case "cID":
+                    Clients = Clients.OrderBy(s => s.ClientId);
+                    break;
+                default:
+                    Clients = Clients.OrderBy(s => s.ClientId);
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             return View(await PaginatedList<Client>.CreateAsync(Clients.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Clients/Details/5
-        [Authorize(Roles = "Administrator, Manager, Staff")]
+        [Authorize(Roles = "")]//"Administrator, Manager, Staff")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

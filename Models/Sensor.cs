@@ -7,8 +7,6 @@ namespace web.Models
     {
         //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int SensorId { get; set; }    
-        public ApplicationUser? Owner { get; set; }
-
         public string SerialNumber { get; set; }
         public string? Location { get; set; }
         public string? Type { get; set; }
