@@ -61,11 +61,12 @@ namespace web.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
+        
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            
             Username = userName;
 
             Input = new InputModel

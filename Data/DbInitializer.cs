@@ -14,33 +14,18 @@ namespace web.Data
             context.Database.EnsureCreated();
 
             // Look for any clients.
-            if (context.Clients.Any())
+            if (context.Sensor.Any())
             {
                 return;   // DB has been seeded
             }
-
-            //add admin client
-            var clients = new Client[]
-            {
-                new Client{FirstName="Jan",LastName="Hribar",OrgType="Admin",OrgId=0}/*,
-                new Client{FirstName="Marija",LastName="Horvat",OrgType="",OrgId=0},
-                new Client{FirstName="Janez",LastName="Kovacic",OrgType="",OrgId=1},
-                new Client{FirstName="Ana",LastName="Krajnc",OrgType="",OrgId=2},
-                new Client{FirstName="Marko",LastName="Zupancic",OrgType="",OrgId=3},
-                new Client{FirstName="Maja",LastName="Kovac",OrgType="",OrgId=4},
-                new Client{FirstName="Andrej",LastName="Potocnik",OrgType="",OrgId=5},
-                new Client{FirstName="Irena",LastName="Mlakar",OrgType="",OrgId=6}*/
-            };
-
-            context.Clients.AddRange(clients);
-            context.SaveChanges();
-            
+     
             //add roles
             var roles = new IdentityRole[] {
                 new IdentityRole{Id="1", Name="Administrator", NormalizedName="Admin"},
                 new IdentityRole{Id="2", Name="Manager", NormalizedName="Mng"},
                 new IdentityRole{Id="3", Name="Staff", NormalizedName="Staff"},
                 new IdentityRole{Id="4", Name="User", NormalizedName="User"}
+
             };
             context.Roles.AddRange(roles);
 
@@ -50,21 +35,27 @@ namespace web.Data
                 context.Roles.Add(r);
             }
             */
+            var com = new Company{CompanyId = 3,CompanyName = "FRI3", Addrass = "Vecna pot111111"};
+
+            context.Company.Add(com);
+            context.SaveChanges();
 
             //add admin user
             var user = new ApplicationUser
             {
-                Email = "jhribar8@gmail.com",
+                UserName = "1@1",
+                NormalizedUserName = "1@1",
+                Email = "1@1",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
-                ClientId = context.Clients.First().ClientId
+                CompanyId = com.CompanyId
             };
 
             if (!context.Users.Any(u => u.UserName == user.UserName))
             {
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user,"Admin!23");
+                var hashed = password.HashPassword(user,"123");
                 user.PasswordHash = hashed;
                 context.Users.Add(user);
                 
@@ -72,6 +63,34 @@ namespace web.Data
             
             context.SaveChanges();
 
+            var loc = new Location[]{
+                new Location{LocationId = 0, Name = "funny man", Address = "green man"},
+                new Location{LocationId = 1, Name = "no funny man", Address = "green manaaaaaaaaa"}
+            };
+
+            context.Location.AddRange(loc);
+            context.SaveChanges();
+
+
+
+
+            var sensors = new Sensor[]{
+                new Sensor{SensorId = 1, SensorName = "funny", Type = "senHOCL", SerialNumber = "1", LocationId = loc[1].LocationId},
+                new Sensor{SensorId = 2, SensorName = "funny2", Type = "senHOCL", SerialNumber = "2", Location = loc[0]},
+                new Sensor{SensorId = 3, SensorName = "funny3", Type = "senHOCL", SerialNumber = "3"},
+            };
+
+
+            context.Sensor.AddRange(sensors);
+            context.SaveChanges();
+
+            
+
+
+
+
+
+            /*
             //set admin role
             var UserRoles = new IdentityUserRole<string>[]
             {
@@ -84,40 +103,8 @@ namespace web.Data
                 context.UserRoles.Add(r);
             }
             context.SaveChanges();
+            */
 
-
-            var sensors = new Sensor[]
-            {
-                new Sensor{SerialNumber="1",Type="senTemp",Location="Vhod",FirmwareVersion="1"}/*,
-                new Sensor{SerialNumber="2",Type="senHOCL",Location="Glavni bazen",FirmwareVersion="1"},
-                new Sensor{SerialNumber="66212",Type="senHOCL",Location="Tobogan",FirmwareVersion="1"},
-                new Sensor{SerialNumber="08990",Type="senHOCL",Location="Tobogan",FirmwareVersion="1"},
-                new Sensor{SerialNumber="41769",Type="senHOCL",Location="Savna",FirmwareVersion="1"},
-                new Sensor{SerialNumber="83990",Type="senPH",Location="Glavni bazen",FirmwareVersion="1"},
-                new Sensor{SerialNumber="10088",Type="senORP",Location="Glavni bazen",FirmwareVersion="1"}*/
-            };
-
-            context.Sensors.AddRange(sensors);
-            context.SaveChanges();
-            
-            var accesses = new SensorAccess[]
-            {
-                new SensorAccess{ClientId=1,SensorId=context.Sensors.First().SensorId}/*,
-                new SensorAccess{ClientId=1,SensorId=4022},
-                new SensorAccess{ClientId=1,SensorId=4041},
-                new SensorAccess{ClientId=2,SensorId=1045},
-                new SensorAccess{ClientId=2,SensorId=3141},
-                new SensorAccess{ClientId=2,SensorId=2021},
-                new SensorAccess{ClientId=3,SensorId=1050},
-                new SensorAccess{ClientId=4,SensorId=1050},
-                new SensorAccess{ClientId=4,SensorId=4022},
-                new SensorAccess{ClientId=5,SensorId=4041},
-                new SensorAccess{ClientId=6,SensorId=1045},
-                new SensorAccess{ClientId=7,SensorId=3141},*/
-            };
-
-            context.Accesses.AddRange(accesses);
-            context.SaveChanges();
             
         }
     }

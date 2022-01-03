@@ -1,27 +1,38 @@
-using web.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using web.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace web.Data
 {
     public class AccessContext : IdentityDbContext<ApplicationUser>
     {
-        public AccessContext(DbContextOptions<AccessContext> options) : base(options)
+        public AccessContext (DbContextOptions<AccessContext> options)
+            : base(options)
         {
         }
 
-        public DbSet<Sensor> Sensors { get; set; }
-        public DbSet<SensorAccess> Accesses { get; set; }
-        public DbSet<Client> Clients { get; set; }
-
+        public DbSet<web.Models.Company> Company { get; set; }
+        public DbSet<web.Models.Sensor> Sensor { get; set; }
+    
+    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); 
+            modelBuilder.Entity<Company>().ToTable("Company");
             modelBuilder.Entity<Sensor>().ToTable("Sensor");
-            modelBuilder.Entity<Client>().ToTable("Client");
-            modelBuilder.Entity<SensorAccess>().ToTable("SensorAccess");
-            modelBuilder.Entity<SensorAccess>().HasKey(t => t.AccessId);
-            //modelBuilder.Entity<SensorAccess>().HasMany(t => t.Sensor).WithMany(t => t.Client);
+            modelBuilder.Entity<Location>().ToTable("Location");
+            modelBuilder.Entity<UserSensor>().ToTable("UserSensor");
         }
+    
+    
+        public DbSet<web.Models.UserSensor> UserSensor { get; set; }
+    
+    
+        public DbSet<web.Models.Location> Location { get; set; }
+
     }
 }

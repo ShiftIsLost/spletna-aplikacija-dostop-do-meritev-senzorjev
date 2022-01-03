@@ -12,8 +12,8 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(AccessContext))]
-    [Migration("20211226181150_ClientReReWork")]
-    partial class ClientReReWork
+    [Migration("20220103174523_dbfix_relations")]
+    partial class dbfix_relations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,7 +169,10 @@ namespace web.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -182,6 +185,12 @@ namespace web.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -218,6 +227,8 @@ namespace web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -229,43 +240,56 @@ namespace web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("web.Models.Client", b =>
+            modelBuilder.Entity("web.Models.Company", b =>
                 {
-                    b.Property<int>("ClientId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"), 1L, 1);
-
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Addrass")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("CompanyName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrgId")
+                    b.HasKey("CompanyId");
+
+                    b.ToTable("Company", (string)null);
+                });
+
+            modelBuilder.Entity("web.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrgType")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ClientId");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Client", (string)null);
+                    b.Property<double?>("x")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("y")
+                        .HasColumnType("float");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Location", (string)null);
                 });
 
             modelBuilder.Entity("web.Models.Sensor", b =>
                 {
                     b.Property<int>("SensorId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SensorId"), 1L, 1);
 
                     b.Property<string>("FirmwareVersion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location")
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SensorName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SerialNumber")
@@ -273,34 +297,38 @@ namespace web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SensorId");
 
+                    b.HasIndex("LocationId");
+
                     b.ToTable("Sensor", (string)null);
                 });
 
-            modelBuilder.Entity("web.Models.SensorAccess", b =>
+            modelBuilder.Entity("web.Models.UserSensor", b =>
                 {
-                    b.Property<int>("AccessId")
+                    b.Property<int>("UserSensorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccessId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSensorId"), 1L, 1);
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SensorId")
                         .HasColumnType("int");
 
-                    b.HasKey("AccessId");
+                    b.HasKey("UserSensorId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("SensorId");
 
-                    b.ToTable("SensorAccess", (string)null);
+                    b.ToTable("UserSensor", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -354,33 +382,57 @@ namespace web.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("web.Models.SensorAccess", b =>
+            modelBuilder.Entity("web.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("web.Models.Client", "Client")
-                        .WithMany("Accesses")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("web.Models.Sensor", "Sensor")
-                        .WithMany("Accesses")
-                        .HasForeignKey("SensorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Sensor");
-                });
-
-            modelBuilder.Entity("web.Models.Client", b =>
-                {
-                    b.Navigation("Accesses");
+                    b.HasOne("web.Models.Company", null)
+                        .WithMany("UserId")
+                        .HasForeignKey("CompanyId");
                 });
 
             modelBuilder.Entity("web.Models.Sensor", b =>
                 {
-                    b.Navigation("Accesses");
+                    b.HasOne("web.Models.Location", null)
+                        .WithMany("Sensor")
+                        .HasForeignKey("LocationId");
+                });
+
+            modelBuilder.Entity("web.Models.UserSensor", b =>
+                {
+                    b.HasOne("web.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserSensor")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("web.Models.Sensor", "Sensor")
+                        .WithMany("UserSensor")
+                        .HasForeignKey("SensorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Sensor");
+                });
+
+            modelBuilder.Entity("web.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("UserSensor");
+                });
+
+            modelBuilder.Entity("web.Models.Company", b =>
+                {
+                    b.Navigation("UserId");
+                });
+
+            modelBuilder.Entity("web.Models.Location", b =>
+                {
+                    b.Navigation("Sensor");
+                });
+
+            modelBuilder.Entity("web.Models.Sensor", b =>
+                {
+                    b.Navigation("UserSensor");
                 });
 #pragma warning restore 612, 618
         }

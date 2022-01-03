@@ -1,5 +1,6 @@
-using web.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using web.Data;
 using Microsoft.AspNetCore.Identity;
 using web.Models;
 
@@ -9,18 +10,18 @@ var connectionString = builder.Configuration.GetConnectionString("AccessContext"
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//builder.Services.AddDbContext<AccessContext>(options =>
-//            options.UseSqlServer(builder.Configuration.GetConnectionString("AccessContext")));
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AccessContext>();
 
 
+
 builder.Services.AddDbContext<AccessContext>(options =>
     options.UseSqlServer(connectionString));
 
-var app = builder.Build();
 
+var app = builder.Build();
 CreateDbIfNotExists(app);
 
 // Configure the HTTP request pipeline.
@@ -36,14 +37,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthentication();
-app.MapRazorPages();
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+
+
 
 
 static void CreateDbIfNotExists(IHost host)
@@ -64,3 +69,4 @@ static void CreateDbIfNotExists(IHost host)
                 }
             }
         }
+

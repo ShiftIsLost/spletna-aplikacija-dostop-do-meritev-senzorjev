@@ -5,31 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using web.Data;
 using web.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
-    [Authorize]
-    public class SensorsController : Controller
+    public class CompanyController : Controller
     {
         private readonly AccessContext _context;
-        private readonly UserManager<ApplicationUser> _usermanager;
-        public SensorsController(AccessContext context, UserManager<ApplicationUser> userManager)
+
+        public CompanyController(AccessContext context)
         {
             _context = context;
-            _usermanager = userManager;
         }
 
-        // GET: Sensors
+        // GET: Company
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sensors.ToListAsync());
+            return View(await _context.Company.ToListAsync());
         }
 
-        // GET: Sensors/Details/5
+        // GET: Company/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,45 +34,39 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var Sensor = await _context.Sensors
-                .FirstOrDefaultAsync(m => m.SensorId == id);
-            if (Sensor == null)
+            var company = await _context.Company
+                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return View(Sensor);
+            return View(company);
         }
 
-        // GET: Sensors/Create
+        // GET: Company/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Sensors/Create
+        // POST: Company/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SensorId,SerialNumber")] Sensor Sensor)
+        public async Task<IActionResult> Create([Bind("CompanyId,CompanyName,Addrass")] Company company)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-
             if (ModelState.IsValid)
             {
-                //Sensor.Owner = currentUser;
-                
-
-                _context.Add(Sensor);
+                _context.Add(company);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(Sensor);
+            return View(company);
         }
-        
 
-        // GET: Sensors/Edit/5
+        // GET: Company/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,22 +74,22 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var Sensor = await _context.Sensors.FindAsync(id);
-            if (Sensor == null)
+            var company = await _context.Company.FindAsync(id);
+            if (company == null)
             {
                 return NotFound();
             }
-            return View(Sensor);
+            return View(company);
         }
 
-        // POST: Sensors/Edit/5
+        // POST: Company/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SensorId,SerialNumber")] Sensor Sensor)
+        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,CompanyName,Addrass")] Company company)
         {
-            if (id != Sensor.SensorId)
+            if (id != company.CompanyId)
             {
                 return NotFound();
             }
@@ -107,12 +98,12 @@ namespace web.Controllers
             {
                 try
                 {
-                    _context.Update(Sensor);
+                    _context.Update(company);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SensorExists(Sensor.SensorId))
+                    if (!CompanyExists(company.CompanyId))
                     {
                         return NotFound();
                     }
@@ -123,10 +114,10 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(Sensor);
+            return View(company);
         }
 
-        // GET: Sensors/Delete/5
+        // GET: Company/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,30 +125,30 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var Sensor = await _context.Sensors
-                .FirstOrDefaultAsync(m => m.SensorId == id);
-            if (Sensor == null)
+            var company = await _context.Company
+                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            if (company == null)
             {
                 return NotFound();
             }
 
-            return View(Sensor);
+            return View(company);
         }
 
-        // POST: Sensors/Delete/5
+        // POST: Company/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var Sensor = await _context.Sensors.FindAsync(id);
-            _context.Sensors.Remove(Sensor);
+            var company = await _context.Company.FindAsync(id);
+            _context.Company.Remove(company);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SensorExists(int id)
+        private bool CompanyExists(int id)
         {
-            return _context.Sensors.Any(e => e.SensorId == id);
+            return _context.Company.Any(e => e.CompanyId == id);
         }
     }
 }
