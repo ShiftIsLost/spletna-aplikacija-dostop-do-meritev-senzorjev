@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using web.Data;
 using web.Models;
 
 namespace web.Controllers
 {
+    [Authorize(Roles ="Administrator, Manager")]
     public class UserSensorController : Controller
     {
         private readonly AccessContext _context;
@@ -27,6 +29,7 @@ namespace web.Controllers
         // GET: UserSensor
         public async Task<IActionResult> Index()
         {
+            ApplicationUser usr = await GetCurrentUserAsync(); 
             var accessContext = _context.UserSensor.Include(u => u.ApplicationUser).Include(u => u.Sensor);
             return View(await accessContext.ToListAsync());
         }
@@ -54,8 +57,8 @@ namespace web.Controllers
         // GET: UserSensor/Create
         public IActionResult Create()
         {
-
-            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorId");
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorName");
             return View();
         }
 
@@ -64,18 +67,16 @@ namespace web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserSensorId,SensorId")] UserSensor userSensor)
+        public async Task<IActionResult> Create([Bind("UserSensorId,SensorId,ApplicationUserId")] UserSensor userSensor)
         {
-            ApplicationUser usr = await GetCurrentUserAsync();
-            userSensor.ApplicationUserId = usr.Id;
-            if (userSensor.ApplicationUserId != null)
+            if (ModelState.IsValid)
             {
                 _context.Add(userSensor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorId", userSensor.SensorId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName", userSensor.ApplicationUserId);
+            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorName", userSensor.SensorId);
             return View(userSensor);
         }
 
