@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using web.Data;
 using web.Models;
 
 namespace web.Controllers
 {
+    [Authorize(Roles ="Administrator, Manager")]
     public class LocationController : Controller
     {
         private readonly AccessContext _context;
