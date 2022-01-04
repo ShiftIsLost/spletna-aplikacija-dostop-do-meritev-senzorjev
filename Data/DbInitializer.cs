@@ -9,7 +9,7 @@ namespace web.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(AccessContext context)
+        public static void Initialize(AccessContext context, UserManager<ApplicationUser> userManager)
         {
             context.Database.EnsureCreated();
 
@@ -43,9 +43,9 @@ namespace web.Data
             //add admin user
             var user = new ApplicationUser
             {
-                UserName = "1@1",
-                NormalizedUserName = "1@1",
-                Email = "1@1",
+                UserName = "Admin@1",
+                NormalizedUserName = "Admin@1",
+                Email = "Admin@1",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
@@ -60,12 +60,60 @@ namespace web.Data
                 context.Users.Add(user);
                 
             }
-            
+            userManager.AddToRoleAsync(user, "Administrator");
+            context.SaveChanges();
+
+
+            //add Manager user
+            user = new ApplicationUser
+            {
+                UserName = "Manager@1",
+                NormalizedUserName = "Manager@1",
+                Email = "Manager@1",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                CompanyId = com.CompanyId
+            };
+
+            if (!context.Users.Any(u => u.UserName == user.UserName))
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(user,"123");
+                user.PasswordHash = hashed;
+                context.Users.Add(user);
+                
+            }
+            userManager.AddToRoleAsync(user, "Manager");
+            context.SaveChanges();
+
+
+            //add Staff user
+            user = new ApplicationUser
+            {
+                UserName = "Staff@1",
+                NormalizedUserName = "Staff@1",
+                Email = "Staff@1",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                CompanyId = com.CompanyId
+            };
+
+            if (!context.Users.Any(u => u.UserName == user.UserName))
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(user,"123");
+                user.PasswordHash = hashed;
+                context.Users.Add(user);
+                
+            }
+            userManager.AddToRoleAsync(user, "Staff");
             context.SaveChanges();
 
             var loc = new Location[]{
-                new Location{LocationId = 0, Name = "funny man", Address = "green man"},
-                new Location{LocationId = 1, Name = "no funny man", Address = "green manaaaaaaaaa"}
+                new Location{LocationId = 0, Name = "Atlantis", Address = "Smartinska cesta 193 1000 Ljubljana"},
+                new Location{LocationId = 1, Name = "?", Address = "?"}
             };
 
             context.Location.AddRange(loc);
@@ -75,9 +123,9 @@ namespace web.Data
 
 
             var sensors = new Sensor[]{
-                new Sensor{SensorId = 1, SensorName = "funny", Type = "senHOCL", SerialNumber = "1", LocationId = loc[1].LocationId},
-                new Sensor{SensorId = 2, SensorName = "funny2", Type = "senHOCL", SerialNumber = "2", Location = loc[0]},
-                new Sensor{SensorId = 3, SensorName = "funny3", Type = "senHOCL", SerialNumber = "3"},
+                new Sensor{SensorId = 1, SensorName = "Glavni senzor", Type = "senHOCL", SerialNumber = "1", LocationId = loc[1].LocationId},
+                new Sensor{SensorId = 2, SensorName = "A2", Type = "senHOCL", SerialNumber = "2", Location = loc[0]},
+                new Sensor{SensorId = 3, SensorName = "A3", Type = "senHOCL", SerialNumber = "3"},
             };
 
 
