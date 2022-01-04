@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
+using web.Filters;
 
 namespace web.Controllers_Api
 {
     [Route("api/v1/sensor")]
     [ApiController]
+    [ApiKeyAuth]
     public class SensorApiController : ControllerBase
     {
         private readonly AccessContext _context;
