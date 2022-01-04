@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>AddSensor to your account</h1>
 
-<h4>UserSensor</h4>
+<h4>AddSensor</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,10 +15,6 @@
             <div class="form-group">
                 <label asp-for="SensorId" class="control-label"></label>
                 <select asp-for="SensorId" class ="form-control" asp-items="ViewBag.SensorId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
