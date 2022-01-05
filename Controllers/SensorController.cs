@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using web.Data;
 using web.Models;
 
@@ -15,16 +16,28 @@ namespace web.Controllers
     public class SensorController : Controller
     {
         private readonly AccessContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SensorController(AccessContext context)
+        public SensorController(AccessContext context,UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Sensor
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sensor.ToListAsync());
+            ApplicationUser usr = await GetCurrentUserAsync();
+            if (_context.UserRoles.Where(r => r.UserId == usr.Id).Any(r => r.RoleId == "1" | r.RoleId == "2")){
+                return View(await _context.Sensor.ToListAsync());
+            }
+            var query = from Sensor in _context.Sensor
+                join UserSensor in _context.UserSensor on Sensor.SensorId equals UserSensor.SensorId
+                where UserSensor.ApplicationUserId == usr.Id
+                select Sensor;
+            return View(query.ToList());
         }
 
         // GET: Sensor/Details/5

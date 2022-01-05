@@ -28,8 +28,7 @@ namespace web.Controllers
 
         // GET: UserSensor
         public async Task<IActionResult> Index()
-        {
-            ApplicationUser usr = await GetCurrentUserAsync(); 
+        { 
             var accessContext = _context.UserSensor.Include(u => u.ApplicationUser).Include(u => u.Sensor);
             return View(await accessContext.ToListAsync());
         }
