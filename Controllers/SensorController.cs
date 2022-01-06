@@ -57,7 +57,10 @@ namespace web.Controllers
             {
                 ViewBag.location = await _context.Location.FirstOrDefaultAsync(m => m.LocationId == sensor.LocationId);
             }
-            
+            var timeStamp = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            timeStamp -= 3600000;
+            var timeStamp2 = timeStamp - 3600000*2;
+            ViewBag.iframe = "https://213.143.69.216:3000/d-solo/T9QRPcTnz/test?orgId=1&var-Serial="+sensor.SerialNumber+"&from="+timeStamp2+"&to="+timeStamp+"&panelId=2";
             return View(sensor);
         }
 

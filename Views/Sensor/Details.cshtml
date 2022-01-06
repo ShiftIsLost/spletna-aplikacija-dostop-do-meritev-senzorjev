@@ -4,7 +4,8 @@
     ViewData["Title"] = "Details";
 }
 @{   
-    var data = ViewBag.location;  
+    var data = ViewBag.location;
+    var iframe = ViewBag.iframe;   
 } 
 
 <h1>Details</h1>
@@ -51,7 +52,8 @@
         </dd>
     </dl>
 </div>
-<iframe src="https://213.143.69.216:3000/d-solo/T9QRPcTnz/test?orgId=1&from=1641413388828&to=1641416988828&panelId=2" width="450" height="200" frameborder="0"></iframe>
+<iframe src=@iframe 
+width="900" height="400" frameborder="0"></iframe>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.SensorId">Edit</a> |
     <a asp-action="Index">Back to List</a>
