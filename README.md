@@ -6,6 +6,8 @@ Peter Savnik 63200260
 
 Namen: Upravljalna plošča, ki uporabniku predstavlja dovoljene senzorjev, kjer lahko spremlja njihove meritve.
 
+Dostop: http://213.143.69.216/
+
 Delovanje: Sistem se postavi iz strani odjemalca, npr. podjetje Atlantis. Uporabniki osnovno lahko dobijo 4 vloge; Admin, Manager, Staff in User. Te vloge se lahko spremenijo glede na notranjo hierarhijo podjetja. Osnovni uporabnik ima le dostop do pregleda senzorjev, ki jih mu je odobril admin ali menedžer. Uporabnik lahko za dovoljen senzor le pogleda podrobnosti, kjer vidi lokacijo, ime, tip, serijsko številko, verzijo firmwara, glede na serijsko številko pa se prikaže vmesnik Grafane, ki prikaže podatke senzorja iz influxDB baze. Admin lahko vidi/dodaja/spreminja vse podatke.
 
 ![image](https://user-images.githubusercontent.com/15855414/148589844-59eb7eca-a9de-4f2b-a552-a621ee750122.png)
