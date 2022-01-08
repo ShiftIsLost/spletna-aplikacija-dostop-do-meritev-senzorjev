@@ -32,6 +32,9 @@ Peter Savnik: spletna aplikacija, mySQL, InfuxDB, Grafana, mobilna aplikacija
 
 
 Uporabljene tehnologije: 
+
     Ogrodje C# dotnet 6.0
+    
     Baze: mySQL, InfluxDB
+    
     Izris podatkov: Grafana
