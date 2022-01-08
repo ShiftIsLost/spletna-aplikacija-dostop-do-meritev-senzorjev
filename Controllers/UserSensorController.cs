@@ -5,23 +5,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using web.Data;
 using web.Models;
 
 namespace web.Controllers
 {
+    [Authorize(Roles ="Administrator, Manager")]
     public class UserSensorController : Controller
     {
         private readonly AccessContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserSensorController(AccessContext context)
+        public UserSensorController(AccessContext context,UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: UserSensor
         public async Task<IActionResult> Index()
-        {
+        { 
             var accessContext = _context.UserSensor.Include(u => u.ApplicationUser).Include(u => u.Sensor);
             return View(await accessContext.ToListAsync());
         }
@@ -49,8 +56,8 @@ namespace web.Controllers
         // GET: UserSensor/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorId");
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorName");
             return View();
         }
 
@@ -67,8 +74,8 @@ namespace web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", userSensor.ApplicationUserId);
-            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorId", userSensor.SensorId);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName", userSensor.ApplicationUserId);
+            ViewData["SensorId"] = new SelectList(_context.Sensor, "SensorId", "SensorName", userSensor.SensorId);
             return View(userSensor);
         }
 

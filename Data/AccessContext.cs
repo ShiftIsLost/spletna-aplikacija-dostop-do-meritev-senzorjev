@@ -17,7 +17,8 @@ namespace web.Data
 
         public DbSet<web.Models.Company> Company { get; set; }
         public DbSet<web.Models.Sensor> Sensor { get; set; }
-    
+        public DbSet<web.Models.UserSensor> UserSensor { get; set; }
+        public DbSet<web.Models.Location> Location { get; set; }
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,10 +30,7 @@ namespace web.Data
         }
     
     
-        public DbSet<web.Models.UserSensor> UserSensor { get; set; }
-    
-    
-        public DbSet<web.Models.Location> Location { get; set; }
+       
 
     }
 }

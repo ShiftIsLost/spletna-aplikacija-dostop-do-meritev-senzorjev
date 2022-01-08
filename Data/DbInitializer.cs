@@ -18,7 +18,7 @@ namespace web.Data
             {
                 return;   // DB has been seeded
             }
-     
+
             //add roles
             var roles = new IdentityRole[] {
                 new IdentityRole{Id="1", Name="Administrator", NormalizedName="Admin"},
@@ -41,31 +41,99 @@ namespace web.Data
             context.SaveChanges();
 
             //add admin user
-            var user = new ApplicationUser
+            var user1 = new ApplicationUser
             {
-                UserName = "1@1",
-                NormalizedUserName = "1@1",
-                Email = "1@1",
+                UserName = "Admin@1",
+                NormalizedUserName = "Admin@1",
+                Email = "Admin@1",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString("D"),
                 CompanyId = com.CompanyId
             };
 
-            if (!context.Users.Any(u => u.UserName == user.UserName))
+            if (!context.Users.Any(u => u.UserName == user1.UserName))
             {
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user,"123");
-                user.PasswordHash = hashed;
-                context.Users.Add(user);
+                var hashed = password.HashPassword(user1,"123");
+                user1.PasswordHash = hashed;
+                context.Users.Add(user1);
                 
             }
             
             context.SaveChanges();
 
+            var userRoles1 = new IdentityUserRole<string>[]{
+                new IdentityUserRole<string>{RoleId = "1", UserId = user1.Id},
+                new IdentityUserRole<string>{RoleId = "2", UserId = user1.Id},
+                new IdentityUserRole<string>{RoleId = "3", UserId = user1.Id},
+                new IdentityUserRole<string>{RoleId = "4", UserId = user1.Id}
+            };
+            context.UserRoles.AddRange(userRoles1);
+            context.SaveChanges();
+
+            //add Manager user
+            var user2 = new ApplicationUser
+            {
+                UserName = "Manager@1",
+                NormalizedUserName = "Manager@1",
+                Email = "Manager@1",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                CompanyId = com.CompanyId
+            };
+
+            if (!context.Users.Any(u => u.UserName == user2.UserName))
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(user2,"123");
+                user2.PasswordHash = hashed;
+                context.Users.Add(user2);
+            }
+            context.SaveChanges();
+
+            var userRoles2 = new IdentityUserRole<string>[]{
+                new IdentityUserRole<string>{RoleId = "4", UserId = user2.Id},
+                new IdentityUserRole<string>{RoleId = "2", UserId = user2.Id},
+                new IdentityUserRole<string>{RoleId = "3", UserId = user2.Id}
+            };
+            context.UserRoles.AddRange(userRoles2);
+            context.SaveChanges();
+
+
+            //add Staff user
+            var user3 = new ApplicationUser
+            {
+                UserName = "Staff@1",
+                NormalizedUserName = "Staff@1",
+                Email = "Staff@1",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+                CompanyId = com.CompanyId
+            };
+
+            if (!context.Users.Any(u => u.UserName == user3.UserName))
+            {
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(user3,"123");
+                user3.PasswordHash = hashed;
+                context.Users.Add(user3);
+                
+            }
+            context.SaveChanges();
+
+            var userRoles3 = new IdentityUserRole<string>[]{
+                new IdentityUserRole<string>{RoleId = "4", UserId = user3.Id},
+                new IdentityUserRole<string>{RoleId = "3", UserId = user3.Id}
+            };
+            context.UserRoles.AddRange(userRoles3);
+            context.SaveChanges();
+
             var loc = new Location[]{
-                new Location{LocationId = 0, Name = "funny man", Address = "green man"},
-                new Location{LocationId = 1, Name = "no funny man", Address = "green manaaaaaaaaa"}
+                new Location{LocationId = 0, Name = "Atlantis", Address = "Smartinska cesta 193 1000 Ljubljana"},
+                new Location{LocationId = 1, Name = "?", Address = "?"}
             };
 
             context.Location.AddRange(loc);
@@ -75,9 +143,9 @@ namespace web.Data
 
 
             var sensors = new Sensor[]{
-                new Sensor{SensorId = 1, SensorName = "funny", Type = "senHOCL", SerialNumber = "1", LocationId = loc[1].LocationId},
-                new Sensor{SensorId = 2, SensorName = "funny2", Type = "senHOCL", SerialNumber = "2", Location = loc[0]},
-                new Sensor{SensorId = 3, SensorName = "funny3", Type = "senHOCL", SerialNumber = "3"},
+                new Sensor{SensorId = 1, SensorName = "Glavni senzor", Type = "senHOCL", SerialNumber = "1", LocationId = loc[1].LocationId},
+                new Sensor{SensorId = 2, SensorName = "A2", Type = "senHOCL", SerialNumber = "2", Location = loc[0]},
+                new Sensor{SensorId = 3, SensorName = "A3", Type = "senHOCL", SerialNumber = "3"},
             };
 
 

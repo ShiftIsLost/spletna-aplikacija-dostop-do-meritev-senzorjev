@@ -11,6 +11,7 @@ using web.Models;
 
 namespace web.Controllers
 {
+    [Authorize(Roles ="Administrator, Manager")]
     public class CompanyController : Controller
     {
         private readonly AccessContext _context;

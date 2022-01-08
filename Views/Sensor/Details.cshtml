@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Details";
 }
+@{   
+    var data = ViewBag.location;
+    var iframe = ViewBag.iframe;   
+} 
 
 <h1>Details</h1>
 
@@ -11,10 +15,16 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LocationId)
+            Lokacija
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LocationId)
+            @data.Address @data.Name
+        </dd>
+        <dt class = "col-sm-2">
+            kordinate
+        </dt>
+        <dd class = "col-sm-10">
+            @data.x , @data.y
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.SensorName)
@@ -42,6 +52,8 @@
         </dd>
     </dl>
 </div>
+<iframe src=@iframe 
+width="900" height="400" frameborder="0"></iframe>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.SensorId">Edit</a> |
     <a asp-action="Index">Back to List</a>
