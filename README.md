@@ -26,7 +26,8 @@ Naloge glede na člana:
 Jan Hribar: spletna aplikacija, mySQL, spletna storitev, API, poročilo
 Peter Savnik: spletna aplikacija, mySQL, InfuxDB, Grafana, mobilna aplikacija
 
-![image](https://user-images.githubusercontent.com/15855414/148589643-da68c4b9-e922-4278-a52e-e899898cdd2b.png)
+![image](https://user-images.githubusercontent.com/15855414/148661923-28e6ba5b-ceef-4d58-a2b9-0f0957da6193.png)
+
 
 
 
