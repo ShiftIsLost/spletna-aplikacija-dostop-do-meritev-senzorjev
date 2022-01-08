@@ -13,9 +13,12 @@ Delovanje: Sistem se postavi iz strani odjemalca, npr. podjetje Atlantis. Uporab
 ![image](https://user-images.githubusercontent.com/15855414/148590128-33a5ac0c-4632-4ddd-9345-d0b1c0a00438.png)
 
 
-Android aplikacija pridobi podatke iz baze preko API, ki zahteva splošno avtentikacijo. //kaj vidi user na aplikaciji
+Android aplikacija pridobi podatke iz baze preko API, ki zahteva splošno avtentikacijo. Uporabnik se v mobilno aplikacijo prijavi z istim računom kot na spletno aplikacijo. Iz tam vidi orizoma poišče senzor s povezavo na stran grafane z grafom podatkov senzorja.
 
-//screenshot mobilne app
+![image](https://user-images.githubusercontent.com/15855414/148661255-962f4c18-b5a7-48e8-89a4-425c4c42299d.png)
+![image](https://user-images.githubusercontent.com/15855414/148661260-4bd1f42a-48f4-4efe-8106-ed4902e79514.png)
+![image](https://user-images.githubusercontent.com/15855414/148661263-7b946800-8e2d-4d02-90e4-dd5cae51fe0e.png)
+
 
 Naloge glede na člana:
 Jan Hribar: spletna aplikacija, mySQL, spletna storitev, API, poročilo
